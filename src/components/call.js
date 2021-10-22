@@ -2,10 +2,10 @@ import React from "react";
 
 import { useEffect, useState } from "react";
 
-//redux
+//redux reducer
 import { useSelector } from "react-redux";
 
-//redux action
+//redux action function
 import { addCallList, modifyCall } from "../state/action";
 
 //api function
@@ -28,19 +28,24 @@ const URL = "https://aircall-job.herokuapp.com/activities";
 
 const { TabPane } = Tabs;
 
-//The compoent is a container ,get data,It is a state component
+//The compoent is a container, It is a state component
 
 export const Call_container = () => {
   const [running, setRunning] = useState(false); //used to display spin
 
   useEffect(() => {
     //get all call
-    api.getRequest(URL, []).then((result) => {
-      addCallList(result);
-    });
+    api
+      .getRequest(URL, [])
+      .then((result) => {
+        addCallList(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
-  const callList = useSelector((state) => state.callList);
+  const callList = useSelector((state) => state.callList); //get all call list from reducer
 
   //The function used to change archived status
   const handle_archived = async (call) => {
@@ -50,10 +55,14 @@ export const Call_container = () => {
 
     let url = URL + "/" + call.id;
 
-    let result = await api.postRequest(url, obj);
+    try {
+      let result = await api.postRequest(url, obj);
 
-    //modify reducer;
-    modifyCall(result);
+      //modify reducer;
+      modifyCall(result);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   //The function used to archive All or reset all
@@ -67,6 +76,7 @@ export const Call_container = () => {
     setRunning(false);
   };
 
+  //display child component
   return (
     <div>
       <div style={{ marginLeft: "1%" }}>
@@ -103,6 +113,8 @@ export const Call_container = () => {
 //////This component is stateless compoent
 
 const ArchiveOrResetAll = (props) => {
+
+  //user click archive all or reset all button
   const onClick = () => {
     //we do not process directly and pass to the parent component
     props.handle_all(props.status);
@@ -140,11 +152,12 @@ const Feed = (props) => {
 
   const date = api.processDate(props.call.created_at); //covert time in order to display
 
+
   const handleOK = () => {
     setVisible(false); //stop displaying call detail
   };
 
-  //used to process popup menu
+  //user click menu item of the popup menu
   const onClick = (e) => {
     switch (e.key) {
       case "archived":
@@ -160,7 +173,7 @@ const Feed = (props) => {
     }
   };
 
-  //The popdown menu
+  //The popup menu
   const menu = (
     <Menu onClick={onClick}>
       <Menu.Item key="archived">
@@ -191,7 +204,7 @@ const Feed = (props) => {
 
         <span className="font1">{props.call.from}</span>
 
-        <Tooltip title="Click me">
+        <Tooltip title="Click it">
           <a className="menu">
             <Dropdown overlay={menu} trigger={["click"]}>
               <MoreOutlined style={{ fontSize: "25px", color: "#9c9a95" }} />

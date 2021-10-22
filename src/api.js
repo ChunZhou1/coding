@@ -117,24 +117,42 @@ const archiveAll = async (callList) => {
   let obj = {};
   obj.is_archived = true;
 
+  let promiseArray = [];
+
   for (let i = 0; i < callList.length; i++) {
     if (callList[i].is_archived === false) {
       let url = URL + "/" + callList[i].id;
-      let result = await postRequest(url, obj);
-      //modify reducer;
-      modifyCall(result);
+      promiseArray.push(postRequest(url, obj));
     }
+  }
+
+  try {
+    let result = await Promise.all(promiseArray);
+
+    //modify redux
+    for (let i = 0; i < result.length; i++) {
+      modifyCall(result[i]);
+    }
+  } catch (err) {
+    console.log(err);
   }
 };
 
 ///////////////////reset//////////////////////////////
 const unAarchiveAll = async () => {
-  let result = await getRequest("https://aircall-job.herokuapp.com/reset", []);
+  try {
+    let result = await getRequest(
+      "https://aircall-job.herokuapp.com/reset",
+      []
+    );
 
-  if (result.message === "done") {
-    //modify reducer
-    result = await getRequest(URL, []);
-    addCallList(result);
+    if (result.message === "done") {
+      //modify reducer
+      result = await getRequest(URL, []);
+      addCallList(result);
+    }
+  } catch (err) {
+    console.log(err);
   }
 };
 
