@@ -113,7 +113,6 @@ export const Call_container = () => {
 //////This component is stateless compoent
 
 const ArchiveOrResetAll = (props) => {
-
   //user click archive all or reset all button
   const onClick = () => {
     //we do not process directly and pass to the parent component
@@ -150,8 +149,9 @@ const ArchiveOrResetAll = (props) => {
 const Feed = (props) => {
   const [visible, setVisible] = useState(false); //if we should display call detail
 
-  const date = api.processDate(props.call.created_at); //covert time in order to display
-
+  const [year, month, day, hour, minute, noon] = api.processDate(
+    props.call.created_at
+  ); //covert time in order to display
 
   const handleOK = () => {
     setVisible(false); //stop displaying call detail
@@ -188,7 +188,7 @@ const Feed = (props) => {
     <div>
       <div className="dash">
         <div className="date">
-          {date[1]},{date[2]},{date[0]}
+          {month},{day},{year}
         </div>
       </div>
       <div className="border">
@@ -212,9 +212,9 @@ const Feed = (props) => {
           </a>
         </Tooltip>
         <span className="time">
-          {date[3]}:{date[4]}
+          {hour}:{minute}
         </span>
-        <span className="noon">{date[5]}</span>
+        <span className="noon">{noon}</span>
       </div>
       <Modal
         title="Call detail"
@@ -272,19 +272,11 @@ const KeyValuePairs = (props) => {
 };
 
 const CallDetail = (props) => {
-  const date = api.processDate(props.call.created_at);
+  const [year, month, day, hour, minute, noon] = api.processDate(
+    props.call.created_at
+  );
   const timeString =
-    date[1] +
-    "," +
-    date[2] +
-    "," +
-    date[0] +
-    " " +
-    date[3] +
-    ":" +
-    date[4] +
-    " " +
-    date[5];
+    month + "," + day + "," + year + " " + hour + ":" + minute + " " + noon;
 
   return (
     <div>
