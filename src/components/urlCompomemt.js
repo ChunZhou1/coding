@@ -71,7 +71,7 @@ export function URL_container() {
     }
 
     addCardList(url);
-    setCardList(cardList1);
+    setCardList(cardList1.slice(0));
   };
 
   const handleUrl = (shortUrl) => {
