@@ -156,7 +156,26 @@ const unAarchiveAll = async () => {
   }
 };
 
+const fetchRequest = (url, type, data, timeout) => {
+  return new Promise((resolve, reject) => {
+    Axios({
+      method: type,
+      url: url,
+      data: data,
+      timeout: timeout,
+    })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject({ error: error, status: "fail" });
+      });
+  });
+};
+
 const api = {
+  fetchRequest: fetchRequest,
   postRequest: postRequest,
   getRequest: getRequest,
   modifyCall_reducer: modifyCall_reducer,

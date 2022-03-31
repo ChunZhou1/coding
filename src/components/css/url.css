@@ -1,10 +1,14 @@
 .border {
-  border-radius: 4%;
+  border-radius: 10%;
   border: 1px solid #d6d3c9;
-  width: 95%;
-  height: 5vh;
-  margin-top: 2%;
-  position: relative;
+  width: 50%;
+}
+
+.card {
+  border-radius: 10%;
+  border: 1px solid #d6d3c9;
+  width: 60%;
+  height: 10vh;
 }
 
 .center {

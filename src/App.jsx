@@ -4,19 +4,16 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { store } from "./state/store";
 
-import Header from "./Header.jsx";
-
 import "antd/dist/antd.css";
 
-import { Call_container } from "./components/call";
+import { URL_container } from "./components/urlCompomemt";
 
 const App = () => {
   return (
-    <div className="container">
-      <Header />
-      <Provider store={store}>
-        <Call_container />
-      </Provider>
+    <div
+      
+    >
+      <URL_container />
     </div>
   );
 };
